@@ -5,7 +5,6 @@
 #include "ListaTerminal.h"
 #include "ListaRoteador.h"
 
-typedef struct celula CelulaT;
 
 struct celula{
     Terminal *terminal;
@@ -49,7 +48,6 @@ void CadastraTerminal(ListaT *lista, char* nome, int id, char* localizacao){
 }
 
 
-
 void RemoveTerminal(ListaT *lista, char* chave){
     CelulaT *p = lista->prim;
     CelulaT *prev = NULL;
@@ -79,6 +77,14 @@ void RemoveTerminal(ListaT *lista, char* chave){
     free(p);
 }
 
+void ConectaTerminal(CelulaT* terminal, CelulaR* roteador){
+    terminal->id_rot = RetornaIdRoteador(RetornaRoteadorLista(roteador));
+}
+
+void DesconctaTerminal(CelulaT *terminal){
+    terminal->id_rot = 0;
+}
+
 void DestroiListaT(ListaT *lista){
     CelulaT *p = lista->prim;
     CelulaT *aux;
@@ -90,3 +96,4 @@ void DestroiListaT(ListaT *lista){
     }
     free(lista);
 }
+

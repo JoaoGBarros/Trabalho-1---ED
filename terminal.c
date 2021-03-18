@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "terminal.h"
-
+#include "roteador.h"
 
 struct terminal{
     char* nome;

@@ -3,7 +3,6 @@
 #include <string.h>
 #include "ListaRoteador.h"
 
-typedef struct celular CelulaR;
 
 typedef struct celulaenlaces CelulaEnlaces;
 
@@ -73,6 +72,79 @@ void RemoveRoteador(ListaR* lista, char* chave){
     }
     free(p->roteador);
     free(p);
+}
+
+void ConectaRoteadores(CelulaR* rot1, CelulaR* rot2){
+    CelulaEnlaces* cel1 = (CelulaEnlaces*)malloc(sizeof(CelulaEnlaces));
+    cel1->roteador = rot1;
+    cel1->prox = NULL;
+    CelulaEnlaces* cel2 = (CelulaEnlaces*)malloc(sizeof(CelulaEnlaces));
+    cel2->roteador = rot2;
+    cel2->prox = NULL;
+    CelulaEnlaces* p;
+    CelulaEnlaces* ant = NULL;
+    for(p = rot1->enlace;p != NULL;p = p->prox){
+        ant = p;
+    }
+    if(ant == NULL){
+        rot1->enlace = cel2;
+    }
+    else{
+        ant->prox = cel2;
+    }
+    ant = NULL;
+    for(p = rot2->enlace;p != NULL;p = p->prox){
+        ant = p;
+    }
+    if(ant == NULL){
+        rot2->enlace = cel1;
+    }
+    else{
+        ant->prox = cel1;
+    }
+}
+
+void DesconectaRoteadores(CelulaR* rot1, CelulaR* rot2){
+    CelulaEnlaces* p = rot1->enlace;
+    CelulaEnlaces* ant = NULL;
+    while(p && strcmp(RetornaNomeRoteador(p->roteador->roteador), RetornaNomeRoteador(rot2->roteador))){
+        ant = p;
+        p = p->prox;
+    }
+
+    if(!p){
+        //Mensagem de erro
+
+    }
+    else if(!ant){
+        rot1->enlace = p->prox;   
+    }
+    else{
+        ant->prox = p->prox;
+    }
+    free(p);
+
+    p = rot2->enlace;
+    while(p && strcmp(RetornaNomeRoteador(p->roteador->roteador), RetornaNomeRoteador(rot1->roteador))){
+        ant = p;
+        p = p->prox;
+    }
+
+    if(!p){
+        //Mensagem de erro
+
+    }
+    else if(!ant){
+        rot2->enlace = p->prox;   
+    }
+    else{
+        ant->prox = p->prox;
+    }
+    free(p);
+}
+
+Roteador* RetornaRoteadorLista(CelulaR* rot){
+    return rot->roteador;
 }
 
 void DestroiListaR(ListaR* lista){

@@ -5,11 +5,15 @@
 
 
 typedef struct lista ListaT;
+typedef struct celula CelulaT;
 
 
 ListaT *iniciaLista();
+
 void CadastraTerminal(ListaT *lista, char* nome, int id, char* localizacao);
+
 void RemoveTerminal(ListaT *lista, char* chave);
+
 void DestroiListaT(ListaT *lista);
 
 

@@ -16,5 +16,16 @@ void RemoveTerminal(ListaT *lista, char* chave);
 
 void DestroiListaT(ListaT *lista);
 
+void DesconctaTerminal(CelulaT *terminal);
+
+void ConectaTerminal(CelulaT* terminal, CelulaR* roteador);
+
+CelulaT* RetornaPrimeiraCelulaListaTerminal(ListaT* lista);
+
+CelulaT* RetornaUltimaCelulaListaTerminal(ListaT* lista);
+
+CelulaT *RetornaProximaCelulaTerminal(CelulaT *p);
+
+Terminal *RetormaTerminalLista(CelulaT* p);
 
 #endif

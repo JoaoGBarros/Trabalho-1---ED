@@ -5,11 +5,11 @@ typedef struct terminal Terminal;
 
 Terminal* CriaTerminal(char* nome, int id, char* localizacao);
 
-char* retornaNomeTerminal(Terminal* terminal);
+char* RetornaNomeTerminal(Terminal* terminal);
 
-int retornaIdTerminal(Terminal *terminal);
+int RetornaIdTerminal(Terminal *terminal);
 
-char* retornaLocalizacaoTerminal(Terminal* terminal);
+char* RetornaLocalizacaoTerminal(Terminal* terminal);
 
 void DestroiTerminal(Terminal *terminal);
 

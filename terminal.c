@@ -22,15 +22,15 @@ Terminal* CriaTerminal(char* nome, int id, char* localizacao){
 }
 
 
-char* retornaNomeTerminal(Terminal* terminal){
+char* RetornaNomeTerminal(Terminal* terminal){
     return terminal->nome;
 }
 
-int retornaIdTerminal(Terminal *terminal){
+int RetornaIdTerminal(Terminal *terminal){
     return terminal->id;
 }
 
-char* retornaLocalizacaoTerminal(Terminal* terminal){
+char* RetornaLocalizacaoTerminal(Terminal* terminal){
     return terminal->localizacao;
 }
 

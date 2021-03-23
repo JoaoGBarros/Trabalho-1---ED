@@ -53,7 +53,7 @@ void RemoveTerminal(ListaT *lista, char* chave){
     CelulaT *prev = NULL;
 
 
-    while(p && strcmp(retornaNomeTerminal(p->terminal), chave)){
+    while(p && strcmp(RetornaNomeTerminal(p->terminal), chave)){
         prev = p;
         p = p->prox;
     }
@@ -83,6 +83,22 @@ void ConectaTerminal(CelulaT* terminal, CelulaR* roteador){
 
 void DesconctaTerminal(CelulaT *terminal){
     terminal->id_rot = 0;
+}
+
+CelulaT *RetornaProximaCelulaTerminal(CelulaT *p){
+    return p->prox;
+}
+
+CelulaT* RetornaPrimeiraCelulaListaTerminal(ListaT* lista){
+    return lista->prim;
+}
+
+CelulaT* RetornaUltimaCelulaListaTerminal(ListaT* lista){
+    return lista->ult;
+}
+
+Terminal *RetormaTerminalLista(CelulaT* p){
+    return p->terminal;
 }
 
 void DestroiListaT(ListaT *lista){

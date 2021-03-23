@@ -11,5 +11,22 @@
 #include <stdlib.h>
 
 
+int main(){
+
+    FILE* arq;
+    char* comando;
+
+    arq = fopen("entrada.txt", "r");
+
+    while(1){
+        fscanf(arq, "%s", comando);
+
+        if(!strcmp(comando, "FIM")){
+            break;
+        }
+    }
+    return 0;
+}
+
 
 

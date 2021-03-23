@@ -22,4 +22,12 @@ Roteador* RetornaRoteadorLista(CelulaR* rot);
 
 void DestroiListaR(ListaR* lista);
 
+CelulaR* RetornaProxCelulaRoteador(CelulaR* cel);
+
+CelulaR* RetornaPrimeiraCelulaListaRoteador(ListaR* lista);
+
+CelulaR* RetornaUltimaCelulaListaRoteador(ListaR* lista);
+
+
+
 #endif

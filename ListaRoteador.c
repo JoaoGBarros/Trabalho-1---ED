@@ -147,6 +147,18 @@ Roteador* RetornaRoteadorLista(CelulaR* rot){
     return rot->roteador;
 }
 
+CelulaR* RetornaProxCelulaRoteador(CelulaR* cel){
+    return cel->prox;
+}
+
+CelulaR* RetornaPrimeiraCelulaListaRoteador(ListaR* lista){
+    return lista->prim;
+}
+
+CelulaR* RetornaUltimaCelulaListaRoteador(ListaR* lista){
+    return lista->ult;
+}
+
 void DestroiListaR(ListaR* lista){
     CelulaR *p = lista->prim;
     CelulaR *aux;

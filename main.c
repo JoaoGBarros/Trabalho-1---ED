@@ -13,7 +13,7 @@
 #include <string.h>
 #include "NetMap.h"
 
-void DesconectaTerminais(ListaR* r, ListaT* t, char* nome);
+void DesconectaTerminais(ListaR* r, ListaT* t, char* nome, FILE* log);
 
 int main(){
 
@@ -31,12 +31,11 @@ int main(){
     log = fopen("log.txt", "w");
     
     if(entrada == NULL){
-        //Error
+        fprintf(log, "ERRO: ENTRADA NAO ENCONTRADA");
     }
 
     while(!feof(entrada)){
         fscanf(entrada, "%s", comando);
-        //printf("%s", comando);
         if(!strcmp(comando, "CADASTRAROTEADOR")){
             fscanf(entrada, "%s", nome);
             fscanf(entrada, "%s", local);
@@ -53,25 +52,25 @@ int main(){
 
         if(!strcmp(comando, "REMOVEROTEADOR")){
             fscanf(entrada, "%s", nome);
-            DesconectaTerminais(RotNetMap, TermNetMap, nome);
-            RemoveRoteador(RotNetMap, nome);
+            DesconectaTerminais(RotNetMap, TermNetMap, nome, log);
+            RemoveRoteador(RotNetMap, nome, log);
         }
 
         if(!strcmp(comando, "REMOVETERMINAL")){
             fscanf(entrada, "%s", nome);
-            RemoveTerminal(TermNetMap, nome);
+            RemoveTerminal(TermNetMap, nome, log);
         }
 
         if(!strcmp(comando, "CONECTAROTEADORES")){
             fscanf(entrada, "%s", nome);
             fscanf(entrada, "%s", local);
-            ConectaRoteadores(RotNetMap, nome, local);
+            ConectaRoteadores(RotNetMap, nome, local, log);
         }
 
         if(!strcmp(comando, "CONECTATERMINAL")){
             fscanf(entrada, "%s", nome);
             fscanf(entrada, "%s", local);
-            ConectaTerminal(TermNetMap, RotNetMap, nome, local);
+            ConectaTerminal(TermNetMap, RotNetMap, nome, local, log);
         }
         
         if(!strcmp(comando, "IMPRIMENETMAP")){
@@ -81,12 +80,12 @@ int main(){
         if(!strcmp(comando, "DESCONECTAROTEADORES")){
             fscanf(entrada, "%s", nome);
             fscanf(entrada, "%s", local);
-            DesconectaRoteadores(RotNetMap, nome, local);
+            DesconectaRoteadores(RotNetMap, nome, local, log);
         }
 
         if(!strcmp(comando, "DESCONECTATERMINAL")){
             fscanf(entrada, "%s", nome);
-            DesconectaTerminal(TermNetMap, nome);
+            DesconectaTerminal(TermNetMap, nome, log);
         }
 
         if(!strcmp(comando, "FREQUENCIATERMINAL")){
@@ -100,13 +99,9 @@ int main(){
         }
 
         if(!strcmp(comando, "ENVIARPACOTESDADOS")){
-            printf("entrou");
             fscanf(entrada, "%s", nome);
             fscanf(entrada, "%s", local);
-            printf("%s", nome);
-            printf("%s", local);
-            EnviarPacotesDados(RotNetMap, TermNetMap, nome, local, saida);
-            printf("envou\n");
+            EnviarPacotesDados(RotNetMap, TermNetMap, nome, local, saida, log);
         }
 
         if(!strcmp(comando, "FIM")){
@@ -124,12 +119,15 @@ int main(){
 }
 
 
-void DesconectaTerminais(ListaR* r, ListaT* t, char* nome){
+void DesconectaTerminais(ListaR* r, ListaT* t, char* nome, FILE* log){
     CelulaR* rot = BuscaRoteadorLista(r, nome);
+    if(!rot){
+        return;
+    }
     CelulaT* ter;
     for(ter = RetornaPrimeiraCelulaListaTerminal(t);ter != NULL;ter = RetornaProximaCelulaTerminal(ter)){
         if(RetornaIdRot(ter) == RetornaIdRoteador(RetornaRoteadorLista(rot))){
-            DesconectaTerminal(t, RetornaNomeTerminal(RetornaTerminalLista(ter)));
+            DesconectaTerminal(t, RetornaNomeTerminal(RetornaTerminalLista(ter)), log);
         }
     }
 }

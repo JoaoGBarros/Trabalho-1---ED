@@ -24,13 +24,13 @@ ListaT *IniciaListaT();
 
 void CadastraTerminal(ListaT *lsta, char* nome, int id, char* localizacao);
 
-void RemoveTerminal(ListaT *lista, char* chave);
+void RemoveTerminal(ListaT *lista, char* chave, FILE* log);
 
 void DestroiListaT(ListaT *lista);
 
-void DesconectaTerminal(ListaT*l, char *terminal);
+void DesconectaTerminal(ListaT*l, char *terminal, FILE* log);
 
-void ConectaTerminal(ListaT* t, ListaR* r, char* terminal, char* roteador);
+void ConectaTerminal(ListaT* t, ListaR* r, char* terminal, char* roteador, FILE* log);
 
 CelulaT* RetornaPrimeiraCelulaListaTerminal(ListaT* lista);
 

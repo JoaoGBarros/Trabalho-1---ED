@@ -85,13 +85,18 @@ void RemoveTerminal(ListaT *lista, char* chave){
     }else{
         prev->prox = p->prox;
     }
-    free(p->terminal);
+    DestroiTerminal(p->terminal);
     free(p);
 }
 
 void ConectaTerminal(ListaT* t, ListaR* r, char* terminal, char* roteador){
     CelulaT* term = BuscaTerminalLista(t, terminal);
     CelulaR* rot = BuscaRoteadorLista(r, roteador);
+
+    if(!term && !rot){
+        //MSG DE ERRO
+        return;
+    }
     if(term != NULL && rot != NULL){
         term->id_rot = RetornaIdRoteador(RetornaRoteadorLista(rot));
     }

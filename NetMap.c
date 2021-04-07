@@ -41,14 +41,17 @@ int EnlaceRoteador(CelulaR* rot1, CelulaR* rot2, int* rots, int* tam){
     CelulaEnlaces* enlace;
     int i = 0;
     int jaFoi = 0;
-    for(enlace = RetornaEnlace(rot1);enlace != NULL;enlace = RetornaProximoEnlace(enlace)){
-        if(RetornaRoteadorCelulaEnlace(enlace) == rot2){
+    //printf("Rot 1: %d Rot 2: %d ", RetornaIdRoteador(RetornaRoteadorLista(rot1)), RetornaIdRoteador(RetornaRoteadorLista(rot2)));
+    enlace = RetornaEnlace(rot1);
+    for(enlace = RetornaEnlace(rot1);enlace != NULL;enlace = RetornaProximoEnlace(enlace)) {
+        if (RetornaRoteadorCelulaEnlace(enlace) == rot2) {
             return 1;
         }
     }
+
     for(enlace = RetornaEnlace(rot1);enlace != NULL;enlace = RetornaProximoEnlace(enlace)){
+        jaFoi = 0;
         for(i = 0; i < *tam ;i++){
-            printf("\n%d", RetornaIdRoteador(RetornaRoteadorLista(RetornaRoteadorCelulaEnlace(enlace))));
             if(RetornaIdRoteador(RetornaRoteadorLista(RetornaRoteadorCelulaEnlace(enlace))) == rots[i]){
                 jaFoi++;
             }
@@ -61,9 +64,11 @@ int EnlaceRoteador(CelulaR* rot1, CelulaR* rot2, int* rots, int* tam){
                 return 1;
             }
             
+            }
+    
         }
     
-    }
+    
 
     return 0;
 
@@ -76,17 +81,26 @@ void EnviarPacotesDados(ListaR* r, ListaT* t, char* chave1, char* chave2, FILE* 
     CelulaR* p;
     int tam = 2;
     int* tamPointer = &tam;
+    if(ter1 && ter2){
+        if(!RetornaIdRot(ter1) || !RetornaIdRot(ter2)){
+            fprintf(saida, "ENVIARPACOTESDADOS %s %s: NAO\n", chave1, chave2);
+            return;
+        }
+        for(p = RetornaPrimeiraCelulaListaRoteador(r);p != NULL;p = RetornaProxCelulaRoteador(p)){
+            if(RetornaIdRoteador(RetornaRoteadorLista(p)) == RetornaIdRot(ter1)){
+                rot1 = p;
+            }
+            if(RetornaIdRoteador(RetornaRoteadorLista(p)) == RetornaIdRot(ter2)){
+                rot2 = p;
+            }
+            if(rot1 && rot2) break;
+        }
+    }else{
+        //MSG DE ERRO
+        return;
+    }
+     
     int* rots = (int*)calloc(tam, sizeof(int));
-    for(p = RetornaPrimeiraCelulaListaRoteador(r);p != NULL;p = RetornaProxCelulaRoteador(p)){
-        if(RetornaIdRoteador(RetornaRoteadorLista(p)) == RetornaIdRot(ter1)){
-            rot1 = p;
-        }
-        if(RetornaIdRoteador(RetornaRoteadorLista(p)) == RetornaIdRot(ter2)){
-            rot2 = p;
-        }
-        if(rot1 && rot2) break;
-    } 
-
     /*
      * Procura o roteador conectado ao terminal
      * comparando o ID da celula do terminal com 
@@ -94,12 +108,13 @@ void EnviarPacotesDados(ListaR* r, ListaT* t, char* chave1, char* chave2, FILE* 
      * rot1/rot2 esse roteador.
      * 
      * */
-    
     if(EnlaceRoteador(rot1, rot2, rots, tamPointer)){
-        fprintf(saida, "ENVIARPACOTESDADOS %s %s: SIM", chave1, chave2);
+        fprintf(saida, "ENVIARPACOTESDADOS %s %s: SIM\n", chave1, chave2);
     }else{
-        fprintf(saida, "ENVIARPACOTESDADOS %s %s: NAO", chave1, chave2);
+        fprintf(saida, "ENVIARPACOTESDADOS %s %s: NAO\n", chave1, chave2);
     }
+
+    free(rots);
     
 }
 
@@ -127,6 +142,7 @@ void ImprimeNetMap(ListaR* listaRot, ListaT* listaTer, FILE* saida){
     }
     for(roteador = RetornaPrimeiraCelulaListaRoteador(listaRot); roteador != NULL; roteador = RetornaProxCelulaRoteador(roteador)){
         enlace = RetornaEnlace(roteador);
+    
         if(!enlace){
             fprintf(saida, "%s; ", RetornaNomeRoteador(RetornaRoteadorLista(roteador)));
             printf("%s; ", RetornaNomeRoteador(RetornaRoteadorLista(roteador)));

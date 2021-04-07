@@ -60,7 +60,7 @@ void CadastraTerminal(ListaT *lista, char* nome, int id, char* localizacao){
 }
 
 
-void RemoveTerminal(ListaT *lista, char* chave){
+void RemoveTerminal(ListaT *lista, char* chave, FILE* log){
     CelulaT *p = lista->prim;
     CelulaT *prev = NULL;
 
@@ -71,7 +71,8 @@ void RemoveTerminal(ListaT *lista, char* chave){
     }
 
     if(!p){
-        
+        fprintf(log, "Erro: Terminal %s inexistente no NetMap", chave);
+        return;
     }
 
     if(p == lista->prim && p == lista->ult){
@@ -85,23 +86,37 @@ void RemoveTerminal(ListaT *lista, char* chave){
     }else{
         prev->prox = p->prox;
     }
-    free(p->terminal);
+    DestroiTerminal(p->terminal);
     free(p);
 }
 
-void ConectaTerminal(ListaT* t, ListaR* r, char* terminal, char* roteador){
+void ConectaTerminal(ListaT* t, ListaR* r, char* terminal, char* roteador, FILE* log){
     CelulaT* term = BuscaTerminalLista(t, terminal);
     CelulaR* rot = BuscaRoteadorLista(r, roteador);
+
+    if(!term){
+        fprintf(log, "Erro: Terminal %s inexistente no NetMap\n", terminal);
+    }
+
+    if(!rot){
+        fprintf(log, "Erro: Roteador %s inexistente no NetMap\n", roteador);  
+    }
+    if(!term || !rot){
+        return;
+    }
+
     if(term != NULL && rot != NULL){
         term->id_rot = RetornaIdRoteador(RetornaRoteadorLista(rot));
     }
-    else{
-        //ERRO
-    }
+
 }
 
-void DesconectaTerminal(ListaT*l, char *terminal){
+void DesconectaTerminal(ListaT*l, char *terminal, FILE* log){
     CelulaT* term = BuscaTerminalLista(l, terminal);
+    if(!term){
+        fprintf(log, "Erro: Terminal %s inexistente no NetMap", terminal);
+        return;
+    }
     term->id_rot = 0;
 }
 

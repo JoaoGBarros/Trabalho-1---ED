@@ -22,13 +22,13 @@ ListaR* IniciaListaR();
 
 void CadastraRoteador(ListaR* lista, char* nome, int id, char* op);
 
-void RemoveRoteador(ListaR* lista, char* chave);
+void RemoveRoteador(ListaR* lista, char* chave, FILE* log);
 
 CelulaR* BuscaRoteadorLista(ListaR* l, char* chave);
 
-void ConectaRoteadores(ListaR* l, char* chave1, char* chave2);
+void ConectaRoteadores(ListaR* l, char* chave1, char* chave2, FILE* log);
 
-void DesconectaRoteadores(ListaR* l, char* chave1, char* chave2);
+void DesconectaRoteadores(ListaR* l, char* chave1, char* chave2, FILE* log);
 
 Roteador* RetornaRoteadorLista(CelulaR* rot);
 

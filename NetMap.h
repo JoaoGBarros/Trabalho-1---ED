@@ -18,7 +18,7 @@ void FrequenciaTerminal(ListaT* lista, char* loc, FILE* saida);
 
 void FrequenciaOperadora(ListaR* lista, char* op, FILE* saida);
 
-void EnviarPacotesDados(ListaR* r, ListaT* t, char* chave1, char* chave2, FILE* saida);
+void EnviarPacotesDados(ListaR* r, ListaT* t, char* chave1, char* chave2, FILE* saida, FILE* log);
 
 void ImprimeNetMap(ListaR* listaRot, ListaT* listaTer, FILE* saida);
 

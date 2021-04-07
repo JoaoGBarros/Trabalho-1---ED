@@ -45,8 +45,12 @@ void DestroiEnlaces(CelulaR *rot){
     CelulaEnlaces* ant = NULL;
     CelulaEnlaces* aux;
 
-    while(!enlace){
+    
+    while(enlace){
         for(aux = enlace->roteador->enlace;;aux = aux->prox){
+            //printf("%s ", RetornaNomeRoteador(RetornaRoteadorLista(enlace->roteador)));
+            //printf("%s ", RetornaNomeRoteador(RetornaRoteadorLista(aux->roteador)));
+            //printf("\n");
             if(RetornaIdRoteador(RetornaRoteadorLista(aux->roteador)) == RetornaIdRoteador(RetornaRoteadorLista(rot))){
                 if(!ant){
                     enlace->roteador->enlace = aux->prox;
@@ -62,7 +66,9 @@ void DestroiEnlaces(CelulaR *rot){
         aux = enlace->prox;
         free(enlace);
         enlace = aux;
+        ant = NULL;
     }
+    printf("\n");
 
 }
 
@@ -82,7 +88,7 @@ void CadastraRoteador(ListaR* lista, char* nome, int id, char* op){
     }
 }
 
-void RemoveRoteador(ListaR* lista, char* chave){
+void RemoveRoteador(ListaR* lista, char* chave, FILE* log){
     CelulaR *p = lista->prim;
     CelulaR *prev = NULL;
 
@@ -93,8 +99,9 @@ void RemoveRoteador(ListaR* lista, char* chave){
     }
 
     if(!p){
-        
+        fprintf(log, "Erro: Roteador %s inexistente no NetMap\n", chave);
     }
+
     else{
         if(p == lista->prim && p == lista->ult){
             lista->prim = NULL;
@@ -107,6 +114,7 @@ void RemoveRoteador(ListaR* lista, char* chave){
         }else{
             prev->prox = p->prox;
         }
+        printf("%s:", RetornaNomeRoteador(p->roteador));
         DestroiEnlaces(p);
         DestroiRoteador(p->roteador);
         free(p);
@@ -126,9 +134,18 @@ CelulaR* BuscaRoteadorLista(ListaR* l, char* chave){
     }
 }
 
-void ConectaRoteadores(ListaR* l, char* chave1, char* chave2){
+void ConectaRoteadores(ListaR* l, char* chave1, char* chave2, FILE* log){
     CelulaR* rot1 = BuscaRoteadorLista(l, chave1);
     CelulaR* rot2 = BuscaRoteadorLista(l, chave2);
+    if(!rot1){
+        fprintf(log, "Erro: Roteador %s inexistente no NetMap\n", chave1);
+    }
+    if(!rot2){
+        fprintf(log, "Erro: Roteador %s inexistente no NetMap\n", chave2);
+    }
+    if(!rot1 || !rot2){
+        return;
+    }
     CelulaEnlaces* cel1 = (CelulaEnlaces*)malloc(sizeof(CelulaEnlaces));
     cel1->roteador = rot1;
     cel1->prox = NULL;
@@ -158,7 +175,7 @@ void ConectaRoteadores(ListaR* l, char* chave1, char* chave2){
     }
 }
 
-void DesconectaRoteadores(ListaR* l, char* chave1, char* chave2){
+void DesconectaRoteadores(ListaR* l, char* chave1, char* chave2, FILE* log){
     CelulaR* rot1 = BuscaRoteadorLista(l, chave1);
     CelulaR* rot2 = BuscaRoteadorLista(l, chave2);
     CelulaEnlaces* p = rot1->enlace;
@@ -168,10 +185,21 @@ void DesconectaRoteadores(ListaR* l, char* chave1, char* chave2){
         p = p->prox;
     }
 
+    if(!rot1){
+        fprintf(log, "Erro: Roteador %s inexistente no NetMap\n", chave1);
+    }
+
+    if(!rot2){
+        fprintf(log, "Erro: Roteador %s inexistente no NetMap\n", chave2);
+    }
     if(!p){
-        //Mensagem de erro
+        fprintf(log, "Erro: Roteadores %s e %s nao estao conectados\n", RetornaNomeRoteador(RetornaRoteadorLista(rot1)), RetornaNomeRoteador(RetornaRoteadorLista(rot2)));
 
     }
+    if(!rot1 || !rot2 || !p){
+        return;
+    }
+
     else if(!ant){
         rot1->enlace = p->prox;   
     }
@@ -181,14 +209,15 @@ void DesconectaRoteadores(ListaR* l, char* chave1, char* chave2){
     free(p);
 
     p = rot2->enlace;
+    ant = NULL;
+
     while(p && strcmp(RetornaNomeRoteador(p->roteador->roteador), RetornaNomeRoteador(rot1->roteador))){
         ant = p;
         p = p->prox;
     }
 
     if(!p){
-        //Mensagem de erro
-
+        fprintf(log, "Erro: Roteadores %s e %s nao estao conectados\n", RetornaNomeRoteador(RetornaRoteadorLista(rot2)), RetornaNomeRoteador(RetornaRoteadorLista(rot1)));
     }
     else if(!ant){
         rot2->enlace = p->prox;   
@@ -233,8 +262,9 @@ void DestroiListaR(ListaR* lista){
     CelulaR *aux;
     while(p != NULL){
         aux = p->prox;
-        DestroiRoteador(p->roteador);
+        printf("%s  ", RetornaNomeRoteador(p->roteador));
         DestroiEnlaces(p);
+        DestroiRoteador(p->roteador);
         free(p);
         p = aux;
     }

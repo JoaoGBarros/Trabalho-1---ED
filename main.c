@@ -65,6 +65,7 @@ int main(){
         if(!strcmp(comando, "CONECTAROTEADORES")){
             fscanf(entrada, "%s", nome);
             fscanf(entrada, "%s", local);
+            printf("%s   %s\n", nome, local);
             ConectaRoteadores(RotNetMap, nome, local);
         }
 
@@ -100,13 +101,10 @@ int main(){
         }
 
         if(!strcmp(comando, "ENVIARPACOTESDADOS")){
-            printf("entrou");
             fscanf(entrada, "%s", nome);
             fscanf(entrada, "%s", local);
-            printf("%s", nome);
-            printf("%s", local);
+            printf("%s    %s", nome, local);
             EnviarPacotesDados(RotNetMap, TermNetMap, nome, local, saida);
-            printf("envou\n");
         }
 
         if(!strcmp(comando, "FIM")){
@@ -126,6 +124,10 @@ int main(){
 
 void DesconectaTerminais(ListaR* r, ListaT* t, char* nome){
     CelulaR* rot = BuscaRoteadorLista(r, nome);
+    if(!rot){
+        //erro
+        return;
+    }
     CelulaT* ter;
     for(ter = RetornaPrimeiraCelulaListaTerminal(t);ter != NULL;ter = RetornaProximaCelulaTerminal(ter)){
         if(RetornaIdRot(ter) == RetornaIdRoteador(RetornaRoteadorLista(rot))){

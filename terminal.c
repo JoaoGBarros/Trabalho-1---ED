@@ -28,7 +28,6 @@ Terminal* CriaTerminal(char* nome, int id, char* localizacao){
     t->nome = strdup(nome);
     t->id = id;
     t->localizacao = strdup(localizacao);
-
     return t;
 }
 
@@ -46,6 +45,7 @@ char* RetornaLocalizacaoTerminal(Terminal* terminal){
 }
 
 void DestroiTerminal(Terminal *terminal){
+    printf("%s, %d, %s\n", terminal->nome, terminal->id, terminal->localizacao);
     free(terminal->nome);
     free(terminal->localizacao);
     free(terminal);

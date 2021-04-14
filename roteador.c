@@ -18,8 +18,10 @@ struct roteador{
     char* nome;
     int id;
     char* operadora;
-};
+}; //Estrutura roteador, contendo suas informacoes.
 
+
+// Responsavel por fazer a alocacao de memoria para o roteador
 Roteador* CriaRoteador(char* nome, int id, char* op){
     Roteador* rot = (Roteador*)malloc(sizeof(Roteador));
     rot->nome = strdup(nome);
@@ -28,6 +30,7 @@ Roteador* CriaRoteador(char* nome, int id, char* op){
     return rot;
 }
 
+//Funcoes retorna para que seja possivel utilizar esses dados em outros TADs
 char* RetornaNomeRoteador(Roteador* roteador){
     return roteador->nome;
 }
@@ -40,6 +43,7 @@ char* RetornaOperadoraRoteador(Roteador* roteador){
     return roteador->operadora;
 }
 
+// Responsavel por liberar a memoria de determinado roteador
 void DestroiRoteador(Roteador* roteador){
     free(roteador->nome);
     free(roteador->operadora);
